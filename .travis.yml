@@ -1,0 +1,21 @@
+language: python
+matrix:
+  include:
+    - python: "2.7"
+    # Basic options
+    - python: "pypy"
+      env: PYPY_VERSION="5.3.1"
+    # Custom options
+    - python: "pypy"
+      env: PYPY_VERSION="5.3" PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v20160629 PYTHON_BUILD_CACHE=$HOME/.pyenv-pypy-cache
+
+cache:
+  - pip
+  - directories:
+    - $HOME/.pyenv_cache
+
+before_install:
+  - if [[ -n "$PYPY_VERSION" ]]; then source setup-pypy.sh; fi
+
+script:
+  - python --version

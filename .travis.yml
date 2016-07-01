@@ -1,0 +1,28 @@
+language: python
+matrix:
+  include:
+    # Without PyPy
+    - python: "2.7"
+    # Basic options
+    - python: "pypy"
+      env: PYPY_VERSION="5.3.1"
+    # Custom options
+    - python: "pypy"
+      env: PYPY_VERSION="5.3" PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v20160629 PYTHON_BUILD_CACHE=$HOME/.pyenv-pypy-cache
+
+cache:
+  - pip
+  - directories:
+    - $HOME/.pyenv_cache
+
+script:
+  - source setup-pypy.sh
+  - python --version
+
+deploy:
+  provider: releases
+  api_key:
+    secure: ZbOjmIOmz3TsPFhM7U+RddpJxVJDfudHhKyr+ZIgc/xTDYuzGDD8VRkexpT3dGoDUpgve0SyHPeeg0Otq54mHaaig4RKQN+xDmBtFnbK+zlqjH9pM14p239wPfuMOksWIUzM15QqWe2DQoJ2BrcTdgP2EntNfJIshsoWK8EZADlqIflwLVSRNJ3qKCW+ScO+XI9CGavnKvm+J1/tBUfF8MyR4HGdFlUw17jzsdz0p5O/D7EM8VHqSGNMy6FtKkvnwuyK6gDgE8Y1o1luTDA6Ii1Qr9d0d1Oo23QIk7XxxLICnBZ+BuUIxr457TKQ1/G52J77xj7rmlo8ntdpY29I1cH8qxsyv2eUZskfO+Zvycgw/cVPkUVW24AiBT2s6cyifI56jIMircPaBGvvA/w0kbkUKAKKBsm49esgaQoxb+ewkxhNUXVo85P6IOG+vuOLiefKByOrDAYhRn8vgWwi51IBZlakjZpwP2x7Os9ffllBlRsQp4l2F6QzNVlkshJpBP7HeEl0HbWjnewmRYhmrnCpvQwI4jBFCrjMcFv763z2BNwTbfLVLZvXCKY4bQM4A/h9bdmt83OVwHqVE8sUuFs6/7iLXdfV+phSEWk/fjR9KA/pf49Jja1rzsqCS+SwPU1rr9M865RPm+1zy4ll2BnUde2o3g6kZEz5XAKl1Ig=
+  file: setup-pypy.sh
+  on:
+    tags: true

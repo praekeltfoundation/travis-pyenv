@@ -1,6 +1,7 @@
 language: python
 matrix:
   include:
+    # Without PyPy
     - python: "2.7"
     # Basic options
     - python: "pypy"
@@ -14,8 +15,6 @@ cache:
   - directories:
     - $HOME/.pyenv_cache
 
-before_install:
-  - if [[ -n "$PYPY_VERSION" ]]; then source setup-pypy.sh; fi
-
 script:
+  - source setup-pypy.sh
   - python --version

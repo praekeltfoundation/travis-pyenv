@@ -24,7 +24,7 @@ if [[ -n "$PYENV_RELEASE" ]]; then
   # Fetch the release archive from Github (slightly faster than cloning)
   mkdir "$PYENV_ROOT"
   curl -SL "https://github.com/yyuu/pyenv/archive/$PYENV_RELEASE.tar.gz" | \
-    tar -xz -C "$PYENV_ROOT" --strip-components 1 -
+    tar -xz -C "$PYENV_ROOT" --strip-components 1
 else
   # Don't have a release to fetch, so just clone directly
   git clone --depth 1 https://github.com/yyuu/pyenv.git "$PYENV_ROOT"

@@ -35,8 +35,8 @@ cache:
 before_install:
   - |
       if [[ -n "$PYPY_VERSION" ]]; then
-        git clone --depth 1 https://github.com/praekeltfoundation/travis-pypy.git
-        source travis-pypy/setup-pypy.sh
+        wget https://github.com/praekeltfoundation/travis-pypy/releases/download/0.1.0/setup-pypy.sh
+        source setup-pypy.sh
       fi
 
 script:

@@ -40,9 +40,9 @@ eval "$(pyenv init -)"
 PYTHON_BUILD_CACHE_PATH="${PYTHON_BUILD_CACHE_PATH:-$HOME/.pyenv_cache}"
 mkdir -p "$PYTHON_BUILD_CACHE_PATH"
 
-# Install the pyenv (pyenv reads $PYENV_VERSION to know what to install)
-pyenv install
-pyenv global
+# Install the pyenv
+pyenv install "$PYENV_VERSION"
+pyenv global "$PYENV_VERSION"
 
 # Make and source a new virtualenv
 VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_PYTHON"

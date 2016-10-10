@@ -1,7 +1,7 @@
 # travis-pyenv
-Set up [`pyenv`](https://github.com/yyuu/pyenv) to use in [Travis CI](https://travis-ci.org) builds.
+Set up [pyenv](https://github.com/yyuu/pyenv) to use in [Travis CI](https://travis-ci.org) builds.
 
-Setting up `pyenv` properly in a Travis CI build environment can be quite tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) that makes this process much simpler.
+Setting up pyenv properly in a Travis CI build environment can be quite tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) that makes this process much simpler.
 
 A common use case for this is to install an up-to-date version of [PyPy](http://pypy.org). The Travis CI build images currently contain a very old version of PyPy which breaks some common Python modules.
 
@@ -50,4 +50,4 @@ script:
 
 ## Notes
 * Installing pyenv by downloading a release tag rather than cloning the git repo can make your builds a bit faster in some cases. Set the `PYENV_RELEASE` environment variable to achieve that.
-* pyenv fails to install properly if ~/.pyenv is present, even if the directory is empty. So if you cache any directories within ~/.pyenv then you will probably break pyenv.
+* pyenv fails to install properly if `~/.pyenv` is present, even if the directory is empty. So if you cache any directories within `~/.pyenv` then you will probably break pyenv.

@@ -1,4 +1,6 @@
 language: python
+env:
+  - SETUP_SCRIPT=setup-pyenv.sh
 matrix:
   include:
     # Without PyPy
@@ -9,6 +11,9 @@ matrix:
     # Custom options
     - python: "pypy"
       env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.2 PYTHON_BUILD_CACHE=$HOME/.pyenv-pypy-cache
+    # Legacy setup-pypy.sh
+    - python: "pypy"
+      env: PYPY_VERSION=5.4.1 SETUP_SCRIPT=setup-pypy.sh
 
 cache:
   - pip
@@ -16,7 +21,7 @@ cache:
     - $HOME/.pyenv_cache
 
 script:
-  - source setup-pyenv.sh
+  - source $SETUP_SCRIPT
   - python --version
 
 deploy:

@@ -4,8 +4,8 @@
 # - PYENV_VERSION
 #     Python to install [required]
 # - PYENV_VERSION_PATTERN
-#     Pattern to grep against the output of `python --version` to validate that
-#     the correct Python was installed [default: none]
+#     Pattern to (f)grep against the output of `python --version` to validate
+#     that the correct Python was installed [default: none]
 # - PYENV_ROOT
 #     Directory in which to install pyenv [default: ~/.pyenv]
 # - PYENV_RELEASE
@@ -50,7 +50,7 @@ virtualenv -p "$(which python)" "$VIRTUAL_ENV"
 source "$VIRTUAL_ENV/bin/activate"
 
 if [[ -n "$PYENV_VERSION_PATTERN" ]]; then
-  if ! python --version 2>&1 | fgrep -E "$PYENV_VERSION_PATTERN"; then
+  if ! python --version 2>&1 | fgrep "$PYENV_VERSION_PATTERN"; then
     echo "Failed to verify that the pyenv was properly installed."
     return 1
   fi

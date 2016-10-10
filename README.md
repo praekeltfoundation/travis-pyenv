@@ -43,7 +43,7 @@ before_install:
       fi
 
 script:
-  - pytest my_project
+  - py.test my_project
 ```
 
 ## Notes

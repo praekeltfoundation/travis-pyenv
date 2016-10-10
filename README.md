@@ -11,8 +11,8 @@ The Travis CI build images currently contain a very old version of PyPy which br
 There are a few install options that can be set via environment variables:
 * `PYENV_VERSION`
     The pyenv to install [required]
-* `PYENV_VERSION_PATTERN`
-    Pattern to (f)grep against the output of `python --version` to validate that the correct Python was installed [default: none]
+* `PYENV_VERSION_STRING`
+    String to `fgrep` against the output of `python --version` to validate that the correct Python was installed (recommended) [default: none]
 * `PYENV_ROOT`
     Directory in which to install pyenv [default: `~/.pyenv`]
 * `PYENV_RELEASE`
@@ -29,7 +29,7 @@ matrix:
     - python: '2.7'
     - python: '3.5'
     - python: pypy
-      env: PYENV_VERSION="pypy-5.4.1" PYENV_VERSION_PATTERN="PyPy 5\.4\.1"
+      env: PYENV_VERSION="pypy-5.4.1" PYENV_VERSION_STRING="PyPy 5.4.1"
 cache:
   - pip
   - directories:

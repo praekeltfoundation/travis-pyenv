@@ -5,10 +5,10 @@ matrix:
     - python: "2.7"
     # Basic options
     - python: "pypy"
-      env: PYENV_VERSION="pypy-5.4.1"
+      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_PATTERN='PyPy 5\.4\.1'
     # Custom options
     - python: "pypy"
-      env: PYENV_VERSION="pypy-5.3" PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v20160629 PYTHON_BUILD_CACHE=$HOME/.pyenv-pypy-cache
+      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_PATTERN='PyPy 5\.4\.1' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.2 PYTHON_BUILD_CACHE=$HOME/.pyenv-pypy-cache
 
 cache:
   - pip

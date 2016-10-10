@@ -19,7 +19,7 @@ if [[ -z "$PYPY_VERSION" ]]; then
   return 0
 fi
 
-export PYENV_VERSION="$PYPY_VERSION"
+export PYENV_VERSION="pypy-$PYPY_VERSION"
 export PYENV_VERSION_STRING="PyPy $PYPY_VERSION"
 
 source "$(dirname "$BASH_SOURCE")"/setup-pyenv.sh

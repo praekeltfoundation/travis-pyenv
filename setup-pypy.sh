@@ -1,3 +1,4 @@
+# DEPRECATED: Please use setup-pyenv.sh rather.
 # NOTE: This script needs to be sourced so it can modify the environment.
 #
 # Environment variables that can be set:
@@ -10,40 +11,15 @@
 # - PYTHON_BUILD_CACHE_PATH:
 #     Directory in which to cache PyPy builds [default: ~/.pyenv_cache]
 
+echo 'WARNING: setup-pypy.sh is *deprecated*. Please use setup-pyenv.sh rather.'
+echo 'setup-pypy.sh will be removed in the next release.'
+
 if [[ -z "$PYPY_VERSION" ]]; then
   echo "\$PYPY_VERSION is not set. Not installing PyPy."
   return 0
 fi
 
-# Get out of the virtualenv we're in.
-deactivate
+export PYENV_VERSION="pypy-$PYPY_VERSION"
+export PYENV_VERSION_STRING="PyPy $PYPY_VERSION"
 
-# Install pyenv
-PYENV_ROOT="${PYENV_ROOT:-$HOME/.pyenv}"
-if [[ -n "$PYENV_RELEASE" ]]; then
-  # Fetch the release archive from Github (slightly faster than cloning)
-  mkdir "$PYENV_ROOT"
-  curl -SL "https://github.com/yyuu/pyenv/archive/$PYENV_RELEASE.tar.gz" | \
-    tar -xz -C "$PYENV_ROOT" --strip-components 1
-else
-  # Don't have a release to fetch, so just clone directly
-  git clone --depth 1 https://github.com/yyuu/pyenv.git "$PYENV_ROOT"
-fi
-
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-# Make sure the cache directory exists
-PYTHON_BUILD_CACHE_PATH="${PYTHON_BUILD_CACHE_PATH:-$HOME/.pyenv_cache}"
-mkdir -p "$PYTHON_BUILD_CACHE_PATH"
-
-# Install pypy and make a virtualenv for it.
-pyenv install -s pypy-$PYPY_VERSION
-pyenv global pypy-$PYPY_VERSION
-virtualenv -p $(which python) "$HOME/env-pypy-$PYPY_VERSION"
-source "$HOME/env-pypy-$PYPY_VERSION/bin/activate"
-
-if ! python --version 2>&1 | fgrep "PyPy $PYPY_VERSION"; then
-  echo "Failed to verify that PyPy was properly installed."
-  return 1
-fi
+source "$(dirname "$BASH_SOURCE")"/setup-pyenv.sh

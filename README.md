@@ -1,16 +1,20 @@
-# travis-pypy
-Set up a more recent [PyPy](http://pypy.org) to use in [Travis CI](https://travis-ci.org).
+# travis-pyenv
+Set up [pyenv](https://github.com/yyuu/pyenv) to use in [Travis CI](https://travis-ci.org) builds.
 
-The Travis CI build images currently contain a very old version of PyPy which breaks a bunch of Python modules. This repository contains a script that can be used to set up a newer version of PyPy in your Travis CI builds using [pyenv](https://github.com/yyuu/pyenv).
+Setting up pyenv properly in a Travis CI build environment can be quite tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) that makes this process much simpler.
+
+A common use case for this is to install an up-to-date version of [PyPy](http://pypy.org). The Travis CI build images currently contain a very old version of PyPy which breaks some common Python modules.
 
 ## Usage
-1. Set the `$PYPY_VERSION` environment variable to the version of PyPy to install.
+1. Set the `$PYENV_VERSION` environment variable to the Python to install.
 2. Tell Travis to cache the `$HOME/.pyenv_cache` directory.
 3. Download and source the script in `before_install`.
 
 There are a few install options that can be set via environment variables:
-* `PYPY_VERSION`
-    Version of PyPy2 to install [required]
+* `PYENV_VERSION`
+    The pyenv to install [required]
+* `PYENV_VERSION_STRING`
+    String to `fgrep` against the output of `python --version` to validate that the correct Python was installed (recommended) [default: none]
 * `PYENV_ROOT`
     Directory in which to install pyenv [default: `~/.pyenv`]
 * `PYENV_RELEASE`
@@ -24,19 +28,20 @@ There are a few install options that can be set via environment variables:
 language: python
 matrix:
   include:
-    - python: "2.7"
-    - python: "pypy"
-      env: PYPY_VERSION="5.3.1"
+    - python: '2.7'
+    - python: '3.5'
+    - python: pypy
+      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
 cache:
   - pip
   - directories:
-    - $HOME/.pyenv_cache
+    - ~/.pyenv_cache
 
 before_install:
   - |
-      if [[ -n "$PYPY_VERSION" ]]; then
-        wget https://github.com/praekeltfoundation/travis-pypy/releases/download/0.1.0/setup-pypy.sh
-        source setup-pypy.sh
+      if [[ -n "$PYENV_VERSION" ]]; then
+        git clone https://github.com/praekeltfoundation/travis-pyenv.git ~/travis-pyenv
+        source ~/travis-pyenv/setup-pyenv.sh
       fi
 
 script:
@@ -45,4 +50,4 @@ script:
 
 ## Notes
 * Installing pyenv by downloading a release tag rather than cloning the git repo can make your builds a bit faster in some cases. Set the `PYENV_RELEASE` environment variable to achieve that.
-* pyenv fails to install properly if ~/.pyenv is present, even if the directory is empty. So if you cache any directories within ~/.pyenv then you will probably break pyenv.
+* pyenv fails to install properly if `~/.pyenv` is present, even if the directory is empty. So if you cache any directories within `~/.pyenv` then you will probably break pyenv.

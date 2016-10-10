@@ -1,6 +1,7 @@
 language: python
 env:
-  - SETUP_SCRIPT=setup-pyenv.sh
+  global:
+    - SETUP_SCRIPT=setup-pyenv.sh
 matrix:
   include:
     # Without PyPy

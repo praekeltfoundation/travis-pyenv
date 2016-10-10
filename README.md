@@ -29,7 +29,7 @@ matrix:
     - python: '2.7'
     - python: '3.5'
     - python: pypy
-      env: PYENV_VERSION="pypy-5.4.1" PYENV_VERSION_STRING="PyPy 5.4.1"
+      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
 cache:
   - pip
   - directories:

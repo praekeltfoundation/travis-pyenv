@@ -40,8 +40,8 @@ cache:
 before_install:
   - |
       if [[ -n "$PYENV_VERSION" ]]; then
-        git clone https://github.com/praekeltfoundation/travis-pyenv.git ~/travis-pyenv
-        source ~/travis-pyenv/setup-pyenv.sh
+        wget https://github.com/praekeltfoundation/travis-pyenv/releases/download/0.2.0/setup-pyenv.sh
+        source setup-pyenv.sh
       fi
 
 script:

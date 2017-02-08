@@ -10,8 +10,8 @@
 #     Directory in which to install pyenv [default: ~/.pyenv]
 # - PYENV_RELEASE
 #     Release tag of pyenv to download [default: clone from master]
-# - PYTHON_BUILD_CACHE_PATH:
-#     Directory in which to cache PyPy builds [default: ~/.pyenv_cache]
+# - PYENV_CACHE_PATH
+#     Directory where full Python builds are cached (i.e., for Travis)
 
 if [[ -z "$PYENV_VERSION" ]]; then
   echo "\$PYENV_VERSION is not set. Not installing a pyenv."
@@ -37,15 +37,43 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 # Make sure the cache directory exists
-PYTHON_BUILD_CACHE_PATH="${PYTHON_BUILD_CACHE_PATH:-$HOME/.pyenv_cache}"
-mkdir -p "$PYTHON_BUILD_CACHE_PATH"
+PYENV_CACHE_PATH="${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
+mkdir -p "$PYENV_CACHE_PATH"
 
-# Install the pyenv
-pyenv install "$PYENV_VERSION"
+
+VERSION_CACHE_PATH="$PYENV_CACHE_PATH/$PYENV_VERSION"
+VERSION_PYENV_PATH="$PYENV_ROOT/versions/$PYENV_VERSION"
+# Check to see if this PYENV_VERSION is in the cache
+if [[ ! -d "$VERSION_CACHE_PATH" ]]; then
+  # If not, use pyenv to download and build from scratch, then move to cache
+  echo "$PYENV_VERSION not found in cache"
+  pyenv install "$PYENV_VERSION"
+  mv "$VERSION_PYENV_PATH" "$PYENV_CACHE_PATH"
+fi
+# Create a link in .pyenv/versions to the cached version build
+ln -s "$VERSION_CACHE_PATH" "$VERSION_PYENV_PATH"
+echo "PYENV_CACHE_PATH"
+ls "$PYENV_CACHE_PATH/"
+echo "VERSION_CACHE_PATH"
+ls "$VERSION_CACHE_PATH/"
+echo "PYENV_ROOT/versions"
+ls "$PYENV_ROOT/versions/"
+echo "PYENV_ROOT/versions/PYENV_VERSION"
+ls "$PYENV_ROOT/versions/$PYENV_VERSION/"
+echo "pyenv versions"
+pyenv versions
+eval "$(pyenv init -)"
 pyenv global "$PYENV_VERSION"
+which python
+which pip
+pyenv which python
+pyenv which pip
 
-# Make and source a new virtualenv
-VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_PYTHON"
+# Make sure virtualenv is installed and up-to-date...
+pip install -U virtualenv
+
+# Then make and source a new virtualenv
+VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_VERSION"
 virtualenv -p "$(which python)" "$VIRTUAL_ENV"
 source "$VIRTUAL_ENV/bin/activate"
 

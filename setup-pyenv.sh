@@ -52,22 +52,12 @@ if [[ ! -d "$VERSION_CACHE_PATH" ]]; then
 fi
 # Create a link in .pyenv/versions to the cached version build
 ln -s "$VERSION_CACHE_PATH" "$VERSION_PYENV_PATH"
-echo "PYENV_CACHE_PATH"
-ls "$PYENV_CACHE_PATH/"
-echo "VERSION_CACHE_PATH"
-ls "$VERSION_CACHE_PATH/"
-echo "PYENV_ROOT/versions"
-ls "$PYENV_ROOT/versions/"
-echo "PYENV_ROOT/versions/PYENV_VERSION"
-ls "$PYENV_ROOT/versions/$PYENV_VERSION/"
-echo "pyenv versions"
-pyenv versions
+# Reinitialize pyenv--if we skipped `pyenv install` and are using a previously
+# cached version, then we need the shims etc. to be created so the pyenv will
+# activate correctly.
 eval "$(pyenv init -)"
 pyenv global "$PYENV_VERSION"
-which python
-which pip
-pyenv which python
-pyenv which pip
+
 
 # Make sure virtualenv is installed and up-to-date...
 pip install -U virtualenv

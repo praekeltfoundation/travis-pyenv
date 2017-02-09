@@ -40,24 +40,23 @@ eval "$(pyenv init -)"
 PYENV_CACHE_PATH="${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
 mkdir -p "$PYENV_CACHE_PATH"
 
-
+# Check to see if this PYENV_VERSION is in the cache; if not, use pyenv to
+# download and build from scratch, then move to cache
 VERSION_CACHE_PATH="$PYENV_CACHE_PATH/$PYENV_VERSION"
 VERSION_PYENV_PATH="$PYENV_ROOT/versions/$PYENV_VERSION"
-# Check to see if this PYENV_VERSION is in the cache
 if [[ ! -d "$VERSION_CACHE_PATH" ]]; then
-  # If not, use pyenv to download and build from scratch, then move to cache
   echo "$PYENV_VERSION not found in cache"
   pyenv install "$PYENV_VERSION"
   mv "$VERSION_PYENV_PATH" "$PYENV_CACHE_PATH"
 fi
-# Create a link in .pyenv/versions to the cached version build
+
+# Create a link in $PYENV_ROOT/versions to the cached version build
 ln -s "$VERSION_CACHE_PATH" "$VERSION_PYENV_PATH"
 # Reinitialize pyenv--if we skipped `pyenv install` and are using a previously
 # cached version, then we need the shims etc. to be created so the pyenv will
 # activate correctly.
 eval "$(pyenv init -)"
 pyenv global "$PYENV_VERSION"
-
 
 # Make sure virtualenv is installed and up-to-date...
 pip install -U virtualenv

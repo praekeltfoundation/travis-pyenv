@@ -1,14 +1,11 @@
 # travis-pyenv
-Set up [pyenv](https://github.com/yyuu/pyenv) to use in [Travis CI](https://travis-ci.org) builds.
-
-Setting up pyenv properly in a Travis CI build environment can be quite tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) that makes this process much simpler.
-
-A common use case for this is to install an up-to-date version of [PyPy](http://pypy.org). The Travis CI build images currently contain a very old version of PyPy which breaks some common Python modules.
+With [Travis CI](https://travis-ci.org), sometimes you want to test your project code using an unsupported Python build, such as an exact version of [CPython](http://www.python.org), a more recent version of [PyPy](http://pypy.org), or any number of other Python implementations. You can use [pyenv](https://github.com/yyuu/pyenv) to install a very specific Python version or distribution, but setting it up properly in a Travis CI build environment can be tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) you can download and call in your `.travis.yml` configuration to simplify this process.
 
 ## Usage
-1. Set the `$PYENV_VERSION` environment variable to the Python to install.
-2. Tell Travis to cache the `$HOME/.pyenv_cache` directory.
+1. Instead of setting a value for `python` in your `.travis.yml` build matrix, use the `$PYENV_VERSION` environment variable to set the pyenv Python version you want to use for a given build.
+2. Tell Travis to cache the `$HOME/.pyenv_cache` directory OR (optionally) some other directory you specify in the `$PYENV_CACHE_PATH` environment variable.
 3. Download and source the script in `before_install`.
+4. Build your project and run your tests as usual.
 
 There are a few install options that can be set via environment variables:
 * `PYENV_VERSION`
@@ -19,8 +16,8 @@ There are a few install options that can be set via environment variables:
     Directory in which to install pyenv [default: `~/.pyenv`]
 * `PYENV_RELEASE`
     Release tag of pyenv to download [default: clone from master]
-* `PYTHON_BUILD_CACHE_PATH`
-    Directory in which to cache PyPy builds [default: `~/.pyenv_cache`]
+* `PYENV_CACHE_PATH`
+    Directory in which to cache pyenv's Python builds [default: `~/.pyenv_cache`]
 
 
 ### Example `travis.yml`
@@ -28,19 +25,18 @@ There are a few install options that can be set via environment variables:
 language: python
 matrix:
   include:
-    - python: '2.7'
+    - env: PYENV_VERSION='2.7.13' PYENV_VERSION_STRING='Python 2.7.13'
     - python: '3.5'
-    - python: pypy
-      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
+    - env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
 cache:
   - pip
   - directories:
-    - ~/.pyenv_cache
+    - $HOME/.pyenv_cache
 
 before_install:
   - |
       if [[ -n "$PYENV_VERSION" ]]; then
-        wget https://github.com/praekeltfoundation/travis-pyenv/releases/download/0.2.0/setup-pyenv.sh
+        wget https://github.com/jthomale/travis-pyenv/raw/develop/setup-pyenv.sh
         source setup-pyenv.sh
       fi
 
@@ -50,4 +46,5 @@ script:
 
 ## Notes
 * Installing pyenv by downloading a release tag rather than cloning the git repo can make your builds a bit faster in some cases. Set the `PYENV_RELEASE` environment variable to achieve that.
-* pyenv fails to install properly if `~/.pyenv` is present, even if the directory is empty. So if you cache any directories within `~/.pyenv` then you will probably break pyenv.
+* If you want to use `$PYENV_CACHE_PATH`, you must also set up Travis to cache this directory in your Travis configuration. Using the cache is optional, but it can greatly speed up subsequent builds.
+* pyenv fails to install properly if the `$PYENV_ROOT` is already present, even if the directory is empty. So if you set Travis to cache any directories within the pyenv root, then you will probably break pyenv. That's why Python builds are cached outside the pyenv root and then linked after pyenv is installed.

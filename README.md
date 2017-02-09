@@ -36,7 +36,7 @@ cache:
 before_install:
   - |
       if [[ -n "$PYENV_VERSION" ]]; then
-        wget https://github.com/jthomale/travis-pyenv/raw/develop/setup-pyenv.sh
+        wget https://github.com/jthomale/travis-pyenv/raw/fullbuild/setup-pyenv.sh
         source setup-pyenv.sh
       fi
 

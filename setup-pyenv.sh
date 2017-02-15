@@ -13,10 +13,17 @@
 # - PYENV_CACHE_PATH
 #     Directory where full Python builds are cached (i.e., for Travis)
 
-# Function: verify_python -- attempts to call the Python command supplied in
-# the first argument with the --version flag. If PYENV_VERSION_STRING is set,
-# then it validates the returned version string as well (via fgrep). Returns
-# whatever status code the command returns.
+PYENV_ROOT="${PYENV_ROOT:-$HOME/.pyenv}"
+PYENV_CACHE_PATH="${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
+version_cache_path="$PYENV_CACHE_PATH/$PYENV_VERSION"
+version_pyenv_path="$PYENV_ROOT/versions/$PYENV_VERSION"
+
+# Functions
+#
+# verify_python -- attempts to call the Python command or binary
+# supplied in the first argument with the --version flag. If
+# PYENV_VERSION_STRING is set, then it validates the returned version string
+# as well (using fgrep). Returns whatever status code the command returns.
 verify_python() {
   local python_bin="$1"
 
@@ -27,8 +34,49 @@ verify_python() {
   fi
 }
 
+# use_cached_python -- Tries symlinking to the cached PYENV_VERSION and
+# verifying that it's a working build. Returns 0 if it's found and it
+# verifies, otherwise returns 1.
+use_cached_python() {
+  if [[ -d "$version_cache_path" ]]; then
+    printf "Cached python found, $PYENV_VERSION. Verifying..."
+    ln -s "$version_cache_path" "$version_pyenv_path"
+    if verify_python "$version_pyenv_path/bin/python"; then
+      printf "success!\n"
+      return 0
+    else
+      printf "FAILED.\nClearing cached version..."
+      rm -f $version_pyenv_path
+      rm -rf $version_cache_path
+      printf "done.\n"
+      return 1
+    fi
+  else
+    echo "No cached python found."
+    return 1
+  fi
+}
+
+# output_debugging_info -- Outputs useful debugging information
+output_debugging_info() {
+  echo "**** Debugging information"
+  printf "PYENV_VERSION\n$PYENV_VERSION\n"
+  printf "PYENV_VERSION_STRING\n$PYENV_VERSION_STRING\n"
+  printf "PYENV_CACHE_PATH\n$PYENV_CACHE_PATH\n"
+  echo "python --version"
+  python --version
+  echo "$version_cache_path/bin/python --version"
+  $version_cache_path/bin/python --version
+  echo "which python"
+  which python
+  echo "pyenv which python"
+  pyenv which python
+}
+
+# Main script begins.
+
 if [[ -z "$PYENV_VERSION" ]]; then
-  echo "\$PYENV_VERSION is not set. Not installing a pyenv."
+  echo "PYENV_VERSION is not set. Not installing a pyenv."
   return 0
 fi
 
@@ -36,7 +84,7 @@ fi
 deactivate
 
 # Install pyenv
-PYENV_ROOT="${PYENV_ROOT:-$HOME/.pyenv}"
+echo "**** Installing pyenv."
 if [[ -n "$PYENV_RELEASE" ]]; then
   # Fetch the release archive from Github (slightly faster than cloning)
   mkdir "$PYENV_ROOT"
@@ -51,38 +99,36 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 # Make sure the cache directory exists
-PYENV_CACHE_PATH="${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
 mkdir -p "$PYENV_CACHE_PATH"
 
-# Verify the PYENV_VERSION in the cache; if it doesn't verify, use pyenv to
-# download and build from scratch, then move to cache if the build succeeds
-version_cache_path="$PYENV_CACHE_PATH/$PYENV_VERSION"
-version_pyenv_path="$PYENV_ROOT/versions/$PYENV_VERSION"
-if ! verify_python "$version_cache_path/bin/python"; then
-  echo "Valid $PYENV_VERSION not found in cache, installing from scratch"
-
+# Try using an already cached PYENV_VERSION. If it fails or is not found,
+# then install from scratch.
+echo "**** Trying to find and use cached python $PYENV_VERSION."
+if ! use_cached_python; then
+  echo "**** Installing python $PYENV_VERSION with pyenv now."
   if pyenv install "$PYENV_VERSION"; then
-    if verify_python "$version_pyenv_path/bin/python"; then
-      # Remove an existing (broken) build from the cache if one exists
-      if [[ -d "$version_cache_path" ]]; then
-        rm -rf "$version_cache_path"
+    if mv "$version_pyenv_path" "$PYENV_CACHE_PATH"; then
+      echo "Python was successfully built and moved to cache."
+      echo "**** Trying to find and use cached python $PYENV_VERSION."
+      if ! use_cached_python; then
+        echo "Python version $PYENV_VERSION was apparently successfully built"
+        echo "with pyenv, but, once cached, it could not be verified."
+        output_debugging_info
+        return 1
       fi
-      mv "$version_pyenv_path" "$PYENV_CACHE_PATH"
     else
-      echo "Failed to verify that the pyenv was properly installed."
-      return 1
+      echo "** Warning: Python was succesfully built, but moving to cache"
+      echo "failed. Proceeding anyway without caching."
     fi
   else
-    echo "pyenv build failed."
+    echo "Python version $PYENV_VERSION build FAILED."
     return 1
   fi
 fi
 
-# Create a link in $PYENV_ROOT/versions to the cached version build
-ln -s "$version_cache_path" "$version_pyenv_path"
-# Reinitialize pyenv--if we skipped `pyenv install` and are using a previously
-# cached version, then we need the shims etc. to be created so the pyenv will
-# activate correctly.
+# Now we have to reinitialize pyenv, as we need the shims etc to be created so
+# the pyenv activates correctly.
+echo "**** Activating python $PYENV_VERSION and generating new virtualenv."
 eval "$(pyenv init -)"
 pyenv global "$PYENV_VERSION"
 
@@ -94,7 +140,11 @@ VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_VERSION"
 virtualenv -p "$(which python)" "$VIRTUAL_ENV"
 source "$VIRTUAL_ENV/bin/activate"
 
-if ! verify_python "python"; then
-  echo "Failed to verify that the pyenv was properly installed."
+printf "One final verification that the virtualenv is working..."
+if verify_python "python"; then
+  printf "success!\n"
+else
+  printf "FAILED!\n"
+  output_debugging_info
   return 1
 fi

@@ -6,11 +6,14 @@ matrix:
     # Normal method of specifying Python version
     - python: '2.7'
     # Use PYENV_VERSION with CPython, specific major.minor.change version
-    - env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
+    - python: pypy
+      env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
     # Use PYENV_VERSION with PyPy
-    - env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
+    - python: pypy
+      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
     # Use PYENV_VERSION with PyPy and Custom options
-    - env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.2 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
+    - python: pypy
+      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.2 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
     # Legacy setup-pypy.sh
     - python: pypy
       env: PYPY_VERSION=5.4.1 SETUP_SCRIPT=setup-pypy.sh

@@ -1,4 +1,3 @@
-language: python
 env:
   global:
     - SETUP_SCRIPT=setup-pyenv.sh
@@ -15,6 +14,20 @@ matrix:
     # Legacy setup-pypy.sh
     - python: pypy
       env: PYPY_VERSION=5.4.1 SETUP_SCRIPT=setup-pypy.sh
+    # macOS
+    # Note that the `python` key is *not* set.
+    # If set, TravisCI will not even start the build and fail since there's
+    # no Python tarball to download and install on macOS.
+    # See https://github.com/travis-ci/travis-ci/issues/2312 for details
+    # So, it shows up as Ruby in TravisCI but as the PYENV_VERSION_STRING check
+    # can attest, we are still fine.
+    - os: 'osx'
+      env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
+    # macOS Framework Build
+    # Useful for PyInstaller
+    # Example issue: https://github.com/pyenv/pyenv/issues/443
+    - os: 'osx'
+      env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0' PYTHON_CONFIGURE_OPTS="--enable-framework"
 
 cache:
   - pip

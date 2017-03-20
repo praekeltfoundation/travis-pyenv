@@ -25,7 +25,7 @@ version_pyenv_path="$PYENV_ROOT/versions/$PYENV_VERSION"
 # PYENV_VERSION_STRING is set, then it validates the returned version string
 # as well (using fgrep). Returns whatever status code the command returns.
 verify_python() {
-  local python_bin="$1"
+  local python_bin="$1"; shift
 
   if [[ -n "$PYENV_VERSION_STRING" ]]; then
     "$python_bin" --version 2>&1 | fgrep "$PYENV_VERSION_STRING" &>/dev/null
@@ -46,8 +46,8 @@ use_cached_python() {
       return 0
     else
       printf "FAILED.\nClearing cached version..."
-      rm -f $version_pyenv_path
-      rm -rf $version_cache_path
+      rm -f "$version_pyenv_path"
+      rm -rf "$version_cache_path"
       printf "done.\n"
       return 1
     fi
@@ -63,14 +63,12 @@ output_debugging_info() {
   printf "PYENV_VERSION\n$PYENV_VERSION\n"
   printf "PYENV_VERSION_STRING\n$PYENV_VERSION_STRING\n"
   printf "PYENV_CACHE_PATH\n$PYENV_CACHE_PATH\n"
-  echo "python --version"
+  set -x
   python --version
-  echo "$version_cache_path/bin/python --version"
   $version_cache_path/bin/python --version
-  echo "which python"
   which python
-  echo "pyenv which python"
   pyenv which python
+  set +x
 }
 
 # Main script begins.
@@ -117,7 +115,7 @@ if ! use_cached_python; then
         return 1
       fi
     else
-      echo "** Warning: Python was succesfully built, but moving to cache"
+      echo "**** Warning: Python was succesfully built, but moving to cache"
       echo "failed. Proceeding anyway without caching."
     fi
   else

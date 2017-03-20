@@ -2,7 +2,7 @@
 With [Travis CI](https://travis-ci.org), sometimes you want to test your project code using an unsupported Python build, such as an exact version of [CPython](http://www.python.org), a more recent version of [PyPy](http://pypy.org), or any number of other Python implementations. You can use [pyenv](https://github.com/yyuu/pyenv) to install a very specific Python version or distribution, but setting it up properly in a Travis CI build environment can be tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) you can download and call in your `.travis.yml` configuration to simplify this process.
 
 ## Usage
-1. In your `.travis.yml` file, to run tests against non-Travis versions of Python, use the `$PYENV_VERSION` environment variable to set the pyenv Python version. (You can also set an appropriate value for `python`, as you normally would, for jobs where you want to continue running tests against Python versions that are already supported by Travis.)
+1. Set the `$PYENV_VERSION` environment variable to the Python to install.
 2. Tell Travis to cache the `$HOME/.pyenv_cache` directory OR (optionally) some other directory you specify in the `$PYENV_CACHE_PATH` environment variable.
 3. Download and source the `setup-pyenv.sh` script in `before_install`.
 4. Build your project and run your tests as usual.

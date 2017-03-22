@@ -1,13 +1,14 @@
+language: python
 env:
   global:
     - SETUP_SCRIPT=setup-pyenv.sh
+
 matrix:
   include:
     # Normal method of specifying Python version
     - python: '2.7'
     # Use PYENV_VERSION with CPython, specific major.minor.change version
-    - language: python
-      env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
+    - env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
     # Use PYENV_VERSION with PyPy
     - python: pypy
       env: PYENV_VERSION=pypy-portable-5.7.0 PYENV_VERSION_STRING='PyPy 5.7.0'

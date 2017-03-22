@@ -35,7 +35,7 @@ matrix:
   include:
     - env: PYENV_VERSION='2.7.13' PYENV_VERSION_STRING='Python 2.7.13'
     - python: '3.5'
-    - env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
+    - env: PYENV_VERSION=pypy-portable-5.7.0 PYENV_VERSION_STRING='PyPy 5.7.0'
 cache:
   - pip
   - directories:

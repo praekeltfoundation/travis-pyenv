@@ -1,4 +1,8 @@
 # travis-pyenv
+
+[![GitHub release](https://img.shields.io/github/release/praekeltfoundation/travis-pyenv.svg?style=flat-square)](https://github.com/praekeltfoundation/travis-pyenv/releases/latest)
+[![Build status](https://img.shields.io/travis/praekeltfoundation/travis-pyenv/develop.svg?style=flat-square)](https://travis-ci.org/praekeltfoundation/travis-pyenv)
+
 Set up [pyenv](https://github.com/yyuu/pyenv) to use in [Travis CI](https://travis-ci.org) builds.
 
 Setting up pyenv properly in a Travis CI build environment can be quite tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) that makes this process much simpler.

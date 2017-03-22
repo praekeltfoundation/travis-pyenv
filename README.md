@@ -7,7 +7,7 @@ Use cases for this include:
 
 * Install an up-to-date version of [PyPy](http://pypy.org). The Travis CI build images currently contain a very old version of PyPy which breaks some common Python modules.
 * Install an exact version of [CPython](http://www.python.org) or some other lesser-known distribution that Travis CI doesn't support.
-* Install Python on Mac OS X builds.
+* Install Python on macOS builds.
 
 ## Usage
 1. Set the `$PYENV_VERSION` environment variable to the Python to install.

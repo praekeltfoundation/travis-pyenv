@@ -1,8 +1,4 @@
 language: python
-env:
-  global:
-    - SETUP_SCRIPT=setup-pyenv.sh
-
 matrix:
   include:
     # Normal method of specifying Python version
@@ -41,7 +37,7 @@ cache:
     - "${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
 
 script:
-  - source $SETUP_SCRIPT
+  - source "${SETUP_SCRIPT:-setup-pyenv.sh}"
   - python --version
 
 deploy:

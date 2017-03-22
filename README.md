@@ -1,4 +1,8 @@
 # travis-pyenv
+
+[![GitHub release](https://img.shields.io/github/release/praekeltfoundation/travis-pyenv.svg?style=flat-square)](https://github.com/praekeltfoundation/travis-pyenv/releases/latest)
+[![Build status](https://img.shields.io/travis/praekeltfoundation/travis-pyenv/develop.svg?style=flat-square)](https://travis-ci.org/praekeltfoundation/travis-pyenv)
+
 Set up [pyenv](https://github.com/yyuu/pyenv) to use in [Travis CI](https://travis-ci.org) builds.
 
 Setting up pyenv properly in a Travis CI build environment can be quite tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) that makes this process much simpler.
@@ -7,7 +11,7 @@ Use cases for this include:
 
 * Install an up-to-date version of [PyPy](http://pypy.org). The Travis CI build images currently contain a very old version of PyPy which breaks some common Python modules.
 * Install an exact version of [CPython](http://www.python.org) or some other lesser-known distribution that Travis CI doesn't support.
-* Install Python on Mac OS X builds.
+* Install Python on macOS builds.
 
 ## Usage
 1. Set the `$PYENV_VERSION` environment variable to the Python to install.
@@ -35,7 +39,7 @@ matrix:
   include:
     - env: PYENV_VERSION='2.7.13' PYENV_VERSION_STRING='Python 2.7.13'
     - python: '3.5'
-    - env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
+    - env: PYENV_VERSION=pypy-portable-5.7.0 PYENV_VERSION_STRING='PyPy 5.7.0'
 cache:
   - pip
   - directories:
@@ -44,8 +48,8 @@ cache:
 before_install:
   - |
       if [[ -n "$PYENV_VERSION" ]]; then
-        wget https://github.com/jthomale/travis-pyenv/raw/fullbuild/setup-pyenv.sh
-        source setup-pyenv.sh
+        git clone --depth 1 https://github.com/praekeltfoundation/travis-pyenv.git
+        source travis-pyenv/setup-pyenv.sh
       fi
 
 script:

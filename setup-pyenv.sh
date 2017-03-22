@@ -78,8 +78,8 @@ if [[ -z "$PYENV_VERSION" ]]; then
   return 0
 fi
 
-# Get out of the virtualenv we're in.
-deactivate
+# Get out of the virtualenv we're in (if we're in one).
+[[ -z "$VIRTUAL_ENV" ]] || deactivate
 
 # Install pyenv
 echo "**** Installing pyenv."

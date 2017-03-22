@@ -1,28 +1,43 @@
 language: python
-env:
-  global:
-    - SETUP_SCRIPT=setup-pyenv.sh
 matrix:
   include:
-    # Without PyPy
+    # Normal method of specifying Python version
     - python: '2.7'
-    # Basic options
+    # Use PYENV_VERSION with CPython, specific major.minor.change version
+    - env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
+    # Use PYENV_VERSION with PyPy
     - python: pypy
-      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1'
-    # Custom options
+      env: PYENV_VERSION=pypy-portable-5.7.0 PYENV_VERSION_STRING='PyPy 5.7.0'
+    # Use PYENV_VERSION with PyPy and Custom options
     - python: pypy
-      env: PYENV_VERSION=pypy-5.4.1 PYENV_VERSION_STRING='PyPy 5.4.1' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.2 PYTHON_BUILD_CACHE=$HOME/.pyenv-pypy-cache
+      env: PYENV_VERSION=pypy-portable-5.6.0 PYENV_VERSION_STRING='PyPy 5.6.0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.8 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
     # Legacy setup-pypy.sh
     - python: pypy
-      env: PYPY_VERSION=5.4.1 SETUP_SCRIPT=setup-pypy.sh
+      env: PYPY_VERSION=5.6.0 SETUP_SCRIPT=setup-pypy.sh
+    # macOS
+    # Note that the `python` key is *not* set and the language is overridden to
+    # *not* be `python`. If set to `python`, the build will fail, complaining
+    # that there's no Python tarball to download and install on macOS.
+    # See https://github.com/travis-ci/travis-ci/issues/2312 for details.
+    # So, it shows up as Ruby in the Travis UI but as the PYENV_VERSION_STRING
+    # check can attest, we are still fine.
+    - os: osx
+      language: ruby
+      env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
+    # macOS Framework Build
+    # Useful for PyInstaller
+    # Example issue: https://github.com/pyenv/pyenv/issues/443
+    - os: osx
+      language: ruby
+      env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0' PYTHON_CONFIGURE_OPTS="--enable-framework"
 
 cache:
   - pip
   - directories:
-    - $HOME/.pyenv_cache
+    - "${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
 
 script:
-  - source $SETUP_SCRIPT
+  - source "${SETUP_SCRIPT:-setup-pyenv.sh}"
   - python --version
 
 deploy:

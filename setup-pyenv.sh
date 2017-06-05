@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # NOTE: This script needs to be sourced so it can modify the environment.
 #
 # Environment variables that can be set:
@@ -39,7 +40,7 @@ verify_python() {
 # verifies, otherwise returns 1.
 use_cached_python() {
   if [[ -d "$version_cache_path" ]]; then
-    printf "Cached python found, $PYENV_VERSION. Verifying..."
+    printf "Cached python found, %s. Verifying..." "$PYENV_VERSION"
     ln -s "$version_cache_path" "$version_pyenv_path"
     if verify_python "$version_pyenv_path/bin/python"; then
       printf "success!\n"
@@ -60,12 +61,12 @@ use_cached_python() {
 # output_debugging_info -- Outputs useful debugging information
 output_debugging_info() {
   echo "**** Debugging information"
-  printf "PYENV_VERSION\n$PYENV_VERSION\n"
-  printf "PYENV_VERSION_STRING\n$PYENV_VERSION_STRING\n"
-  printf "PYENV_CACHE_PATH\n$PYENV_CACHE_PATH\n"
+  printf "PYENV_VERSION\n%s\n" "$PYENV_VERSION"
+  printf "PYENV_VERSION_STRING\n%s\n" "$PYENV_VERSION_STRING"
+  printf "PYENV_CACHE_PATH\n%s\n" "$PYENV_CACHE_PATH"
   set -x
   python --version
-  $version_cache_path/bin/python --version
+  "$version_cache_path/bin/python" --version
   which python
   pyenv which python
   set +x

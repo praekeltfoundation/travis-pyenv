@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # DEPRECATED: Please use setup-pyenv.sh rather.
 # NOTE: This script needs to be sourced so it can modify the environment.
 #

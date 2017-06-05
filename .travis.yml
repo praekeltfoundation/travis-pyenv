@@ -7,12 +7,15 @@ matrix:
     - env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1'
     # Use PYENV_VERSION with PyPy
     - python: pypy
+      dist: trusty
       env: PYENV_VERSION=pypy2-5.7.1 PYENV_VERSION_STRING='PyPy 5.7.1'
     # Use PYENV_VERSION with PyPy and Custom options
     - python: pypy
+      dist: trusty
       env: PYENV_VERSION=pypy2-5.7.0 PYENV_VERSION_STRING='PyPy 5.7.0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.10 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
     # Legacy setup-pypy.sh
     - python: pypy
+      dist: trusty
       env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh
     # macOS
     # Note that the `python` key is *not* set and the language is overridden to

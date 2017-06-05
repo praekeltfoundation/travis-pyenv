@@ -5,7 +5,7 @@
 # - PYENV_VERSION
 #     Python to install [required]
 # - PYENV_VERSION_STRING
-#     String to `fgrep` against the output of `python --version` to validate
+#     String to `grep -F` against the output of `python --version` to validate
 #     that the correct Python was installed (recommended) [default: none]
 # - PYENV_ROOT
 #     Directory in which to install pyenv [default: ~/.pyenv]
@@ -24,12 +24,12 @@ version_pyenv_path="$PYENV_ROOT/versions/$PYENV_VERSION"
 # verify_python -- attempts to call the Python command or binary
 # supplied in the first argument with the --version flag. If
 # PYENV_VERSION_STRING is set, then it validates the returned version string
-# as well (using fgrep). Returns whatever status code the command returns.
+# as well (using grep -F). Returns whatever status code the command returns.
 verify_python() {
   local python_bin="$1"; shift
 
   if [[ -n "$PYENV_VERSION_STRING" ]]; then
-    "$python_bin" --version 2>&1 | fgrep "$PYENV_VERSION_STRING" &>/dev/null
+    "$python_bin" --version 2>&1 | grep -F "$PYENV_VERSION_STRING" &>/dev/null
   else
     "$python_bin" --version &>/dev/null
   fi

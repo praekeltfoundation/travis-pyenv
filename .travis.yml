@@ -8,7 +8,7 @@ matrix:
     # Use PYENV_VERSION with PyPy
     - python: '2.7'
       dist: trusty
-      env: PYENV_VERSION=pypy2-5.7.1 PYENV_VERSION_STRING='PyPy 5.7.1'
+      env: PYENV_VERSION=pypy2-5.7.1 PYENV_VERSION_STRING='PyPy 5.7.1' PYENV_ROOT=$HOME/.travis-pyenv
     # Use PYENV_VERSION with PyPy and Custom options
     - python: '2.7'
       dist: trusty
@@ -16,7 +16,7 @@ matrix:
     # Legacy setup-pypy.sh
     - python: '2.7'
       dist: trusty
-      env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh
+      env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh PYENV_ROOT=$HOME/.travis-pyenv
     # macOS
     # Note that the `python` key is *not* set and the language is overridden to
     # *not* be `python`. If set to `python`, the build will fail, complaining

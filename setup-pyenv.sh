@@ -137,6 +137,7 @@ pip install -U virtualenv
 # Then make and source a new virtualenv
 VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_VERSION"
 virtualenv -p "$(which python)" "$VIRTUAL_ENV"
+# shellcheck source=/dev/null
 source "$VIRTUAL_ENV/bin/activate"
 
 printf "One final verification that the virtualenv is working..."

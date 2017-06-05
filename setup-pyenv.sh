@@ -1,10 +1,11 @@
+#!/usr/bin/env bash
 # NOTE: This script needs to be sourced so it can modify the environment.
 #
 # Environment variables that can be set:
 # - PYENV_VERSION
 #     Python to install [required]
 # - PYENV_VERSION_STRING
-#     String to `fgrep` against the output of `python --version` to validate
+#     String to `grep -F` against the output of `python --version` to validate
 #     that the correct Python was installed (recommended) [default: none]
 # - PYENV_ROOT
 #     Directory in which to install pyenv [default: ~/.pyenv]
@@ -23,12 +24,12 @@ version_pyenv_path="$PYENV_ROOT/versions/$PYENV_VERSION"
 # verify_python -- attempts to call the Python command or binary
 # supplied in the first argument with the --version flag. If
 # PYENV_VERSION_STRING is set, then it validates the returned version string
-# as well (using fgrep). Returns whatever status code the command returns.
+# as well (using grep -F). Returns whatever status code the command returns.
 verify_python() {
   local python_bin="$1"; shift
 
   if [[ -n "$PYENV_VERSION_STRING" ]]; then
-    "$python_bin" --version 2>&1 | fgrep "$PYENV_VERSION_STRING" &>/dev/null
+    "$python_bin" --version 2>&1 | grep -F "$PYENV_VERSION_STRING" &>/dev/null
   else
     "$python_bin" --version &>/dev/null
   fi
@@ -39,7 +40,7 @@ verify_python() {
 # verifies, otherwise returns 1.
 use_cached_python() {
   if [[ -d "$version_cache_path" ]]; then
-    printf "Cached python found, $PYENV_VERSION. Verifying..."
+    printf "Cached python found, %s. Verifying..." "$PYENV_VERSION"
     ln -s "$version_cache_path" "$version_pyenv_path"
     if verify_python "$version_pyenv_path/bin/python"; then
       printf "success!\n"
@@ -60,12 +61,12 @@ use_cached_python() {
 # output_debugging_info -- Outputs useful debugging information
 output_debugging_info() {
   echo "**** Debugging information"
-  printf "PYENV_VERSION\n$PYENV_VERSION\n"
-  printf "PYENV_VERSION_STRING\n$PYENV_VERSION_STRING\n"
-  printf "PYENV_CACHE_PATH\n$PYENV_CACHE_PATH\n"
+  printf "PYENV_VERSION\n%s\n" "$PYENV_VERSION"
+  printf "PYENV_VERSION_STRING\n%s\n" "$PYENV_VERSION_STRING"
+  printf "PYENV_CACHE_PATH\n%s\n" "$PYENV_CACHE_PATH"
   set -x
   python --version
-  $version_cache_path/bin/python --version
+  "$version_cache_path/bin/python" --version
   which python
   pyenv which python
   set +x
@@ -136,6 +137,7 @@ pip install -U virtualenv
 # Then make and source a new virtualenv
 VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_VERSION"
 virtualenv -p "$(which python)" "$VIRTUAL_ENV"
+# shellcheck source=/dev/null
 source "$VIRTUAL_ENV/bin/activate"
 
 printf "One final verification that the virtualenv is working..."

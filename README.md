@@ -23,7 +23,7 @@ There are a few install options that can be set via environment variables:
 * `PYENV_VERSION`
     The pyenv to install [required]
 * `PYENV_VERSION_STRING`
-    String to `fgrep` against the output of `python --version` to validate that the correct Python was installed (recommended) [default: none]
+    String to `grep -F` against the output of `python --version` to validate that the correct Python was installed (recommended) [default: none]
 * `PYENV_ROOT`
     Directory in which to install pyenv [default: `~/.pyenv`]
 * `PYENV_RELEASE`

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # DEPRECATED: Please use setup-pyenv.sh rather.
 # NOTE: This script needs to be sourced so it can modify the environment.
 #
@@ -22,4 +23,5 @@ fi
 export PYENV_VERSION="pypy-$PYPY_VERSION"
 export PYENV_VERSION_STRING="PyPy $PYPY_VERSION"
 
-source "$(dirname "$BASH_SOURCE")"/setup-pyenv.sh
+# shellcheck source=setup-pyenv.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/setup-pyenv.sh

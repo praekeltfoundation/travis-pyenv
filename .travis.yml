@@ -34,6 +34,14 @@ matrix:
       language: ruby
       env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1' PYTHON_CONFIGURE_OPTS="--enable-framework"
 
+    - env: SETUP_SCRIPT=/dev/null SHELLCHECK=1
+      addons:
+        apt:
+          sources:
+          - debian-sid    # Grab ShellCheck from the Debian repo
+          packages:
+          - shellcheck
+
 cache:
   - pip
   - directories:
@@ -42,6 +50,7 @@ cache:
 script:
   - source "${SETUP_SCRIPT:-setup-pyenv.sh}"
   - python --version
+  - if [ -n "$SHELLCHECK" ]; then shellcheck *.sh; fi
 
 deploy:
   provider: releases

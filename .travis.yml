@@ -12,7 +12,7 @@ matrix:
     # Use PYENV_VERSION with PyPy and Custom options
     - python: '2.7'
       dist: trusty
-      env: PYENV_VERSION=pypy3-portable-5.7.0 PYENV_VERSION_STRING='PyPy 5.7.0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.10 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
+      env: PYENV_VERSION=pypy3-portable-5.7.0 PYENV_VERSION_STRING='PyPy 5.7.0-beta0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.10 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
     # Legacy setup-pypy.sh
     - python: '2.7'
       dist: trusty

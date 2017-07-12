@@ -41,6 +41,7 @@ matrix:
     - env: PYENV_VERSION='2.7.13' PYENV_VERSION_STRING='Python 2.7.13'
     - python: '3.5'
     - env: PYENV_VERSION=pypy2.7-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0'
+    - env: PYENV_VERSION=pypy3.5-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0-beta0'
 cache:
   - pip
   - directories:
@@ -49,8 +50,8 @@ cache:
 before_install:
   - |
       if [[ -n "$PYENV_VERSION" ]]; then
-        wget https://github.com/praekeltfoundation/travis-pyenv/releases/download/0.3.0/setup-pyenv.sh
-        source setup-pyenv.sh
+        git clone --depth=1 https://github.com/praekeltfoundation/travis-pyenv.git
+        source travis-pyenv/setup-pyenv.sh
       fi
 
 script:

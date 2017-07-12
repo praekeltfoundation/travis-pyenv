@@ -6,13 +6,13 @@ matrix:
     # Use PYENV_VERSION with CPython, specific major.minor.change version
     - env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1'
     # Use PYENV_VERSION with PyPy
-    - env: PYENV_VERSION=pypy2.7-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0' PYENV_ROOT=$HOME/.travis-pyenv
+    - env: PYENV_VERSION=pypy2.7-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0'
       dist: trusty
     # Use PYENV_VERSION with PyPy and custom options
     - env: PYENV_VERSION=pypy3.5-portable-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0-beta0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.1.2 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
       dist: trusty
     # Legacy setup-pypy.sh
-    - env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh PYENV_ROOT=$HOME/.travis-pyenv
+    - env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh
       dist: trusty
     # macOS
     # Note that the `python` key is *not* set and the language is overridden to

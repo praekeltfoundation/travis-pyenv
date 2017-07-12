@@ -94,7 +94,9 @@ else
   git clone --depth 1 https://github.com/yyuu/pyenv.git "$PYENV_ROOT"
 fi
 
-export PATH="$PYENV_ROOT/bin:$PATH"
+pyenv() {
+  "$PYENV_ROOT/pyenv" "$@"
+}
 eval "$(pyenv init -)"
 
 # Make sure the cache directory exists

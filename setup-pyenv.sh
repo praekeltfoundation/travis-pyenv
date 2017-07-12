@@ -14,7 +14,8 @@
 # - PYENV_CACHE_PATH
 #     Directory where full Python builds are cached (i.e., for Travis)
 
-PYENV_ROOT="${PYENV_ROOT:-$HOME/.travis-pyenv}"
+# PYENV_ROOT is exported because pyenv uses it
+export PYENV_ROOT="${PYENV_ROOT:-$HOME/.travis-pyenv}"
 PYENV_CACHE_PATH="${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
 version_cache_path="$PYENV_CACHE_PATH/$PYENV_VERSION"
 version_pyenv_path="$PYENV_ROOT/versions/$PYENV_VERSION"

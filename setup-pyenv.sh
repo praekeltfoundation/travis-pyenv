@@ -95,7 +95,7 @@ else
 fi
 
 pyenv() {
-  "$PYENV_ROOT/pyenv" "$@"
+  "$PYENV_ROOT/bin/pyenv" "$@"
 }
 eval "$(pyenv init -)"
 

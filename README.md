@@ -58,7 +58,7 @@ script:
 ```
 
 ## Notes
-* Some recent PyPy versions and all recent ["Portable PyPy"](https://github.com/squeaky-pl/portable-pypy) versions **require Travis' [Trusty CI build environment](https://docs.travis-ci.com/user/trusty-ci-environment/)**. See pyenv/pyenv#925.
+* Some recent PyPy versions and all recent ["Portable PyPy"](https://github.com/squeaky-pl/portable-pypy) versions **require Travis' [Trusty CI build environment](https://docs.travis-ci.com/user/trusty-ci-environment/)**. See [pyenv/pyenv#925](https://github.com/pyenv/pyenv/issues/925).
 * Installing pyenv by downloading a release tag rather than cloning the git repo can make your builds a bit faster in some cases. Set the `PYENV_RELEASE` environment variable to achieve that.
 * If you want to use `$PYENV_CACHE_PATH`, you must also set up Travis to cache this directory in your Travis configuration. Using the cache is optional, but it can greatly speed up subsequent builds.
 * pyenv fails to install properly if the `$PYENV_ROOT` is already present, even if the directory is empty. So if you set Travis to cache any directories within the pyenv root, then you will probably break pyenv. For this reason, Python builds are cached outside the pyenv root and then linked after pyenv is installed.

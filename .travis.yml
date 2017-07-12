@@ -1,19 +1,17 @@
 language: python
+dist: trusty
 matrix:
   include:
     # Normal method of specifying Python version
     - python: '2.7'
     # Use PYENV_VERSION with CPython, specific major.minor.change version
-    - env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
+    - env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1'
     # Use PYENV_VERSION with PyPy
-    - python: pypy
-      env: PYENV_VERSION=pypy-portable-5.7.0 PYENV_VERSION_STRING='PyPy 5.7.0'
-    # Use PYENV_VERSION with PyPy and Custom options
-    - python: pypy
-      env: PYENV_VERSION=pypy-portable-5.6.0 PYENV_VERSION_STRING='PyPy 5.6.0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.0.8 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
+    - env: PYENV_VERSION=pypy2.7-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0'
+    # Use PYENV_VERSION with PyPy and custom options
+    - env: PYENV_VERSION=pypy3.5-portable-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0-beta0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.1.2 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
     # Legacy setup-pypy.sh
-    - python: pypy
-      env: PYPY_VERSION=5.6.0 SETUP_SCRIPT=setup-pypy.sh
+    - env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh
     # macOS
     # Note that the `python` key is *not* set and the language is overridden to
     # *not* be `python`. If set to `python`, the build will fail, complaining
@@ -23,13 +21,21 @@ matrix:
     # check can attest, we are still fine.
     - os: osx
       language: ruby
-      env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0'
+      env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1'
     # macOS Framework Build
     # Useful for PyInstaller
     # Example issue: https://github.com/pyenv/pyenv/issues/443
     - os: osx
       language: ruby
-      env: PYENV_VERSION=3.6.0 PYENV_VERSION_STRING='Python 3.6.0' PYTHON_CONFIGURE_OPTS="--enable-framework"
+      env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1' PYTHON_CONFIGURE_OPTS="--enable-framework"
+
+    - env: SETUP_SCRIPT=/dev/null SHELLCHECK=1
+      addons:
+        apt:
+          sources:
+          - debian-sid    # Grab ShellCheck from the Debian repo
+          packages:
+          - shellcheck
 
 cache:
   - pip
@@ -39,6 +45,7 @@ cache:
 script:
   - source "${SETUP_SCRIPT:-setup-pyenv.sh}"
   - python --version
+  - if [ -n "$SHELLCHECK" ]; then shellcheck *.sh; fi
 
 deploy:
   provider: releases

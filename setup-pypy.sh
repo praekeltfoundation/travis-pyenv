@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # DEPRECATED: Please use setup-pyenv.sh rather.
 # NOTE: This script needs to be sourced so it can modify the environment.
 #
@@ -5,7 +6,7 @@
 # - PYPY_VERSION
 #     Version of PyPy2 to install [required]
 # - PYENV_ROOT
-#     Directory in which to install pyenv [default: ~/.pyenv]
+#     Directory in which to install pyenv [default: ~/.travis-pyenv]
 # - PYENV_RELEASE
 #     Release tag of pyenv to download [default: clone from master]
 # - PYTHON_BUILD_CACHE_PATH:
@@ -22,4 +23,5 @@ fi
 export PYENV_VERSION="pypy-$PYPY_VERSION"
 export PYENV_VERSION_STRING="PyPy $PYPY_VERSION"
 
-source "$(dirname "$BASH_SOURCE")"/setup-pyenv.sh
+# shellcheck source=setup-pyenv.sh
+source "$(dirname "${BASH_SOURCE[0]}")"/setup-pyenv.sh

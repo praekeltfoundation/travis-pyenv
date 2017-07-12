@@ -35,12 +35,12 @@ There are a few install options that can be set via environment variables:
 ### Example `travis.yml`
 ```yaml
 language: python
+dist: trusty
 matrix:
   include:
     - env: PYENV_VERSION='2.7.13' PYENV_VERSION_STRING='Python 2.7.13'
     - python: '3.5'
     - env: PYENV_VERSION=pypy2.7-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0'
-      dist: trusty
 cache:
   - pip
   - directories:

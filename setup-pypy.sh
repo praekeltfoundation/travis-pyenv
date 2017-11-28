@@ -5,7 +5,7 @@
 # Environment variables that can be set:
 # - PYPY_VERSION
 #     Version of PyPy2 to install [required]
-# - PYENV_ROOT
+# - TRAVISPYENV_ROOT
 #     Directory in which to install pyenv [default: ~/.travis-pyenv]
 # - PYENV_RELEASE
 #     Release tag of pyenv to download [default: clone from master]

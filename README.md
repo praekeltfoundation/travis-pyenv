@@ -5,6 +5,8 @@
 
 Set up [pyenv](https://github.com/yyuu/pyenv) to use in [Travis CI](https://travis-ci.org) builds.
 
+> NOTE: Because Travis' build environments now seem to set `$PYENV_ROOT` and we need our own location for the pyenv root, the value is now set using `$TRAVISPYENV_ROOT` rather.
+
 Setting up pyenv properly in a Travis CI build environment can be quite tricky. This repo contains a script ([`setup-pyenv.sh`](setup-pyenv.sh)) that makes this process much simpler.
 
 Use cases for this include:
@@ -24,7 +26,7 @@ There are a few install options that can be set via environment variables:
     The pyenv to install [required]
 * `PYENV_VERSION_STRING`
     String to `grep -F` against the output of `python --version` to validate that the correct Python was installed (recommended) [default: none]
-* `PYENV_ROOT`
+* `TRAVISPYENV_ROOT`
     Directory in which to install pyenv [default: `~/.travis-pyenv`]
 * `PYENV_RELEASE`
     Release tag of pyenv to download [default: clone from master]
@@ -62,5 +64,5 @@ script:
 * Some recent PyPy versions and all recent ["Portable PyPy"](https://github.com/squeaky-pl/portable-pypy) versions **require Travis' [Trusty CI build environment](https://docs.travis-ci.com/user/trusty-ci-environment/)**. See [pyenv/pyenv#925](https://github.com/pyenv/pyenv/issues/925).
 * Installing pyenv by downloading a release tag rather than cloning the git repo can make your builds a bit faster in some cases. Set the `PYENV_RELEASE` environment variable to achieve that.
 * If you want to use `$PYENV_CACHE_PATH`, you must also set up Travis to cache this directory in your Travis configuration. Using the cache is optional, but it can greatly speed up subsequent builds.
-* The `$PYENV_ROOT` defaults to `~/.travis-pyenv`, rather than the usual `~/.pyenv`. This is because some of Travis' Trusty build environments already have a pyenv install in this location.
-* pyenv fails to install properly if the `$PYENV_ROOT` is already present, even if the directory is empty. So if you set Travis to cache any directories within the pyenv root, then you will probably break pyenv. For this reason, Python builds are cached outside the pyenv root and then linked after pyenv is installed.
+* The `$PYENV_ROOT` defaults to `~/.travis-pyenv`, rather than the usual `~/.pyenv`. This is because some of Travis' Trusty build environments already have a pyenv install in this location. Also, this value is adjusted with the `$TRAVISPYENV_ROOT` variable rather than `$PYENV_ROOT` as Travis may set `$PYENV_ROOT` itself.
+* pyenv fails to install properly if the `$TRAVISPYENV_ROOT` is already present, even if the directory is empty. So if you set Travis to cache any directories within the pyenv root, then you will probably break pyenv. For this reason, Python builds are cached outside the pyenv root and then linked after pyenv is installed.

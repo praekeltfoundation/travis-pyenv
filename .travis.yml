@@ -1,5 +1,12 @@
 language: python
 dist: trusty
+
+branches:
+  only:
+    - develop
+    - master
+    - /^\d+\.\d+(\.\d+)?$/
+
 matrix:
   include:
     # Normal method of specifying Python version

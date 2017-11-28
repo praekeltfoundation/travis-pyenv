@@ -16,7 +16,7 @@ matrix:
     # Use PYENV_VERSION with PyPy
     - env: PYENV_VERSION=pypy2.7-5.9.0 PYENV_VERSION_STRING='PyPy 5.9.0'
     # Use PYENV_VERSION with PyPy and custom options
-    - env: PYENV_VERSION=pypy3.5-5.9.0 PYENV_VERSION_STRING='PyPy 5.9.0-beta0' TRAVISPYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.1.5 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
+    - env: PYENV_VERSION=pypy3.5-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0-beta0' TRAVISPYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.1.5 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
     # Legacy setup-pypy.sh
     - env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh
     # macOS

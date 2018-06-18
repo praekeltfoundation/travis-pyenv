@@ -36,10 +36,23 @@ verify_python() {
   fi
 }
 
-# use_cached_python -- Tries symlinking to the cached PYENV_VERSION and
-# verifying that it's a working build. Returns 0 if it's found and it
+# use_cached_python -- First checks if there's already an installed
+# PYENV_VERSION Python (i.e. if it's in the Travis base image) and verifying
+# that works. Otherwise tries symlinking to the cached PYENV_VERSION and
+# verifying that it's a working build. Returns 0 if it finds one and it
 # verifies, otherwise returns 1.
 use_cached_python() {
+  if [[ -d "$version_pyenv_path"]]; then
+    printf "Python %s already installed. Verifying..." "$PYENV_VERSION"
+    if verify_python "$version_pyenv_path/bin/python"; then
+      printf "success!\n"
+      return 0
+    else
+      printf "FAILED.\nClearing installed version..."
+      rm -f "$version_pyenv_path"
+      printf "done.\n"
+    fi
+  fi
   if [[ -d "$version_cache_path" ]]; then
     printf "Cached python found, %s. Verifying..." "$PYENV_VERSION"
     ln -s "$version_cache_path" "$version_pyenv_path"

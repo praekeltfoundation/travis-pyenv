@@ -6,6 +6,8 @@ matrix:
     - python: '2.7'
     # Use PYENV_VERSION with CPython, specific major.minor.change version
     - env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1'
+    # Use PYENV_VERSION with CPython which Travis has installed already
+    - env: PYENV_VERSION=2.7.14 PYENV_VERSION_STRING='Python 2.7.14'
     # Use PYENV_VERSION with PyPy
     - env: PYENV_VERSION=pypy2.7-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0'
     # Use PYENV_VERSION with PyPy and custom options

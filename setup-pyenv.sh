@@ -42,7 +42,7 @@ verify_python() {
 # verifying that it's a working build. Returns 0 if it finds one and it
 # verifies, otherwise returns 1.
 use_cached_python() {
-  if [[ -d "$version_pyenv_path"]]; then
+  if [[ -d "$version_pyenv_path" ]]; then
     printf "Python %s already installed. Verifying..." "$PYENV_VERSION"
     if verify_python "$version_pyenv_path/bin/python"; then
       printf "success!\n"

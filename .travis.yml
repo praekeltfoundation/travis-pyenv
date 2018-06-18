@@ -30,12 +30,6 @@ matrix:
       env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1' PYTHON_CONFIGURE_OPTS="--enable-framework"
 
     - env: SETUP_SCRIPT=/dev/null SHELLCHECK=1
-      addons:
-        apt:
-          sources:
-          - debian-sid    # Grab ShellCheck from the Debian repo
-          packages:
-          - shellcheck
 
 cache:
   - pip

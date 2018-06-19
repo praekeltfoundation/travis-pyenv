@@ -139,7 +139,11 @@ pip install -U virtualenv
 
 # Then make and source a new virtualenv
 VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_VERSION"
+
+# shellcheck disable=SC2086
+# We deliberately want to not quote "VIRTUALENV_EXTRA_ARGS" because it's extra arguments which should be split
 virtualenv -p "$(which python)" ${VIRTUALENV_EXTRA_ARGS:-} "$VIRTUAL_ENV"
+
 # shellcheck source=/dev/null
 source "$VIRTUAL_ENV/bin/activate"
 

@@ -1,6 +1,17 @@
 language: python
 dist: trusty
-matrix:
+
+cache:
+  - pip
+  - directories:
+    - "${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
+
+script:
+  - source "${SETUP_SCRIPT:-setup-pyenv.sh}"
+  - python --version
+  - if [ -n "$SHELLCHECK" ]; then shellcheck *.sh; fi
+
+jobs:
   include:
     # Normal method of specifying Python version
     - python: '2.7'
@@ -31,18 +42,6 @@ matrix:
 
     - env: SETUP_SCRIPT=/dev/null SHELLCHECK=1
 
-cache:
-  - pip
-  - directories:
-    - "${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
-
-script:
-  - source "${SETUP_SCRIPT:-setup-pyenv.sh}"
-  - python --version
-  - if [ -n "$SHELLCHECK" ]; then shellcheck *.sh; fi
-
-jobs:
-  include:
     - stage: release
       if: tag IS present
       script: skip

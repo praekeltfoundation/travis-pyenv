@@ -36,12 +36,10 @@ verify_python() {
   fi
 }
 
-# use_cached_python -- First checks if there's already an installed
+# use_existing_python -- checks if there's already an installed
 # PYENV_VERSION Python (i.e. if it's in the Travis base image) and verifying
-# that works. Otherwise tries symlinking to the cached PYENV_VERSION and
-# verifying that it's a working build. Returns 0 if it finds one and it
-# verifies, otherwise returns 1.
-use_cached_python() {
+# that works. Returns 0 if it finds one and it verifies, otherwise returns 1.
+use_existing_python() {
   if [[ -d "$version_pyenv_path" ]]; then
     printf "Python %s already installed. Verifying..." "$PYENV_VERSION"
     if verify_python "$version_pyenv_path/bin/python"; then
@@ -51,8 +49,18 @@ use_cached_python() {
       printf "FAILED.\nClearing installed version..."
       rm -f "$version_pyenv_path"
       printf "done.\n"
+      return 1
     fi
+  else
+    echo "No existing python found"
+    return 1
   fi
+}
+
+# use_cached_python -- Tries symlinking to the cached PYENV_VERSION and
+# verifying that it's a working build. Returns 0 if it's found and it
+# verifies, otherwise returns 1.
+use_cached_python() {
   if [[ -d "$version_cache_path" ]]; then
     printf "Cached python found, %s. Verifying..." "$PYENV_VERSION"
     ln -s "$version_cache_path" "$version_pyenv_path"
@@ -114,10 +122,10 @@ eval "$(pyenv init -)"
 # Make sure the cache directory exists
 mkdir -p "$PYENV_CACHE_PATH"
 
-# Try using an already cached PYENV_VERSION. If it fails or is not found,
+# Try using an already cached/installed PYENV_VERSION. If it fails or is not found,
 # then install from scratch.
 echo "**** Trying to find and use cached python $PYENV_VERSION."
-if ! use_cached_python; then
+if ! use_existing_python && ! use_cached_python; then
   echo "**** Installing python $PYENV_VERSION with pyenv now."
   if pyenv install "$PYENV_VERSION"; then
     if mv "$version_pyenv_path" "$PYENV_CACHE_PATH"; then

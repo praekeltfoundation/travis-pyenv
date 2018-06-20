@@ -30,6 +30,8 @@ There are a few install options that can be set via environment variables:
     Release tag of pyenv to download [default: clone from master]
 * `PYENV_CACHE_PATH`
     Directory in which to cache pyenv's Python builds [default: `~/.pyenv_cache`]
+* `VIRTUALENV_EXTRA_ARGS`
+    Extra arguments to be handed when we setup Virtualenv
 
 
 ### Example `travis.yml`

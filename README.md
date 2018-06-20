@@ -38,10 +38,10 @@ language: python
 dist: trusty
 matrix:
   include:
-    - env: PYENV_VERSION='2.7.13' PYENV_VERSION_STRING='Python 2.7.13'
+    - env: PYENV_VERSION='2.7.15' PYENV_VERSION_STRING='Python 2.7.15'
     - python: '3.5'
-    - env: PYENV_VERSION=pypy2.7-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0'
-    - env: PYENV_VERSION=pypy3.5-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0-beta0'
+    - env: PYENV_VERSION=pypy2.7-6.0.0 PYENV_VERSION_STRING='PyPy 6.0.0'
+    - env: PYENV_VERSION=pypy3.5-6.0.0 PYENV_VERSION_STRING='PyPy 6.0.0'
 cache:
   - pip
   - directories:

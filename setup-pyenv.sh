@@ -7,7 +7,7 @@
 # - PYENV_VERSION_STRING
 #     String to `grep -F` against the output of `python --version` to validate
 #     that the correct Python was installed (recommended) [default: none]
-# - PYENV_ROOT
+# - TRAVISPYENV_ROOT
 #     Directory in which to install pyenv [default: ~/.travis-pyenv]
 # - PYENV_RELEASE
 #     Release tag of pyenv to download [default: clone from master]
@@ -17,7 +17,7 @@
 #     Extra arguments to be used when creating the virtualenv
 
 # PYENV_ROOT is exported because pyenv uses it
-export PYENV_ROOT="${PYENV_ROOT:-$HOME/.travis-pyenv}"
+export PYENV_ROOT="${TRAVISPYENV_ROOT:-$HOME/.travis-pyenv}"
 PYENV_CACHE_PATH="${PYENV_CACHE_PATH:-$HOME/.pyenv_cache}"
 version_cache_path="$PYENV_CACHE_PATH/$PYENV_VERSION"
 version_pyenv_path="$PYENV_ROOT/versions/$PYENV_VERSION"

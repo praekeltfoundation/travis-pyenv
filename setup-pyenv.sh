@@ -13,6 +13,8 @@
 #     Release tag of pyenv to download [default: clone from master]
 # - PYENV_CACHE_PATH
 #     Directory where full Python builds are cached (i.e., for Travis)
+# - VIRTUALENV_EXTRA_ARGS
+#     Extra arguments to be used when creating the virtualenv
 
 # PYENV_ROOT is exported because pyenv uses it
 export PYENV_ROOT="${PYENV_ROOT:-$HOME/.travis-pyenv}"
@@ -33,6 +35,27 @@ verify_python() {
     "$python_bin" --version 2>&1 | grep -F "$PYENV_VERSION_STRING" &>/dev/null
   else
     "$python_bin" --version &>/dev/null
+  fi
+}
+
+# use_existing_python -- checks if there's already an installed
+# PYENV_VERSION Python (i.e. if it's in the Travis base image) and verifying
+# that works. Returns 0 if it finds one and it verifies, otherwise returns 1.
+use_existing_python() {
+  if [[ -d "$version_pyenv_path" ]]; then
+    printf "Python %s already installed. Verifying..." "$PYENV_VERSION"
+    if verify_python "$version_pyenv_path/bin/python"; then
+      printf "success!\n"
+      return 0
+    else
+      printf "FAILED.\nClearing installed version..."
+      rm -f "$version_pyenv_path"
+      printf "done.\n"
+      return 1
+    fi
+  else
+    echo "No existing python found"
+    return 1
   fi
 }
 
@@ -101,10 +124,10 @@ eval "$(pyenv init -)"
 # Make sure the cache directory exists
 mkdir -p "$PYENV_CACHE_PATH"
 
-# Try using an already cached PYENV_VERSION. If it fails or is not found,
+# Try using an already cached/installed PYENV_VERSION. If it fails or is not found,
 # then install from scratch.
 echo "**** Trying to find and use cached python $PYENV_VERSION."
-if ! use_cached_python; then
+if ! use_existing_python && ! use_cached_python; then
   echo "**** Installing python $PYENV_VERSION with pyenv now."
   if pyenv install "$PYENV_VERSION"; then
     if mv "$version_pyenv_path" "$PYENV_CACHE_PATH"; then
@@ -137,7 +160,11 @@ pip install -U virtualenv
 
 # Then make and source a new virtualenv
 VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_VERSION"
-virtualenv -p "$(which python)" "$VIRTUAL_ENV"
+
+# shellcheck disable=SC2086
+# We deliberately want to not quote "VIRTUALENV_EXTRA_ARGS" because it's extra arguments which should be split
+virtualenv -p "$(which python)" ${VIRTUALENV_EXTRA_ARGS:-} "$VIRTUAL_ENV"
+
 # shellcheck source=/dev/null
 source "$VIRTUAL_ENV/bin/activate"
 

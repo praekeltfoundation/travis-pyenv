@@ -13,6 +13,8 @@
 #     Release tag of pyenv to download [default: clone from master]
 # - PYENV_CACHE_PATH
 #     Directory where full Python builds are cached (i.e., for Travis)
+# - VIRTUALENV_EXTRA_ARGS
+#     Extra arguments to be used when creating the virtualenv
 
 # PYENV_ROOT is exported because pyenv uses it
 export PYENV_ROOT="${PYENV_ROOT:-$HOME/.travis-pyenv}"
@@ -137,7 +139,11 @@ pip install -U virtualenv
 
 # Then make and source a new virtualenv
 VIRTUAL_ENV="$HOME/ve-pyenv-$PYENV_VERSION"
-virtualenv -p "$(which python)" "$VIRTUAL_ENV"
+
+# shellcheck disable=SC2086
+# We deliberately want to not quote "VIRTUALENV_EXTRA_ARGS" because it's extra arguments which should be split
+virtualenv -p "$(which python)" ${VIRTUALENV_EXTRA_ARGS:-} "$VIRTUAL_ENV"
+
 # shellcheck source=/dev/null
 source "$VIRTUAL_ENV/bin/activate"
 

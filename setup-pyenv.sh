@@ -14,7 +14,7 @@
 # - PYENV_CACHE_PATH
 #     Directory where full Python builds are cached (i.e., for Travis)
 # - VIRTUALENV_EXTRA_ARGS
-#     Extra arguments to be handed when we setup Virtualenv
+#     Extra arguments to be used when creating the virtualenv
 
 # PYENV_ROOT is exported because pyenv uses it
 export PYENV_ROOT="${PYENV_ROOT:-$HOME/.travis-pyenv}"

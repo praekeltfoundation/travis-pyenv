@@ -31,7 +31,7 @@ There are a few install options that can be set via environment variables:
 * `PYENV_CACHE_PATH`
     Directory in which to cache pyenv's Python builds [default: `~/.pyenv_cache`]
 * `VIRTUALENV_EXTRA_ARGS`
-    Extra arguments to be handed when we setup Virtualenv
+    Extra arguments to be used when creating the virtualenv
 
 
 ### Example `travis.yml`

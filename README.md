@@ -1,5 +1,9 @@
 # travis-pyenv
 
+> **This project is no longer used by Praekelt.org and won't be maintained.**
+  It will remain here if you'd still like to use it. Feel free to adopt it if
+  you want to make some changes.
+
 [![GitHub release](https://img.shields.io/github/release/praekeltfoundation/travis-pyenv.svg?style=flat-square)](https://github.com/praekeltfoundation/travis-pyenv/releases/latest)
 [![Build status](https://img.shields.io/travis/praekeltfoundation/travis-pyenv/develop.svg?style=flat-square)](https://travis-ci.org/praekeltfoundation/travis-pyenv)
 

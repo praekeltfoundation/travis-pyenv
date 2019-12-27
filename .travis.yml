@@ -1,37 +1,5 @@
 language: python
 dist: trusty
-matrix:
-  include:
-    # Normal method of specifying Python version
-    - python: '2.7'
-    # Use PYENV_VERSION with CPython, specific major.minor.change version
-    - env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1'
-    # Use PYENV_VERSION with CPython which Travis has installed already
-    - env: PYENV_VERSION=2.7.14 PYENV_VERSION_STRING='Python 2.7.14'
-    # Use PYENV_VERSION with PyPy
-    - env: PYENV_VERSION=pypy2.7-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0'
-    # Use PYENV_VERSION with PyPy and custom options
-    - env: PYENV_VERSION=pypy3.5-portable-5.8.0 PYENV_VERSION_STRING='PyPy 5.8.0-beta0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.1.2 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
-    # Legacy setup-pypy.sh
-    - env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh
-    # macOS
-    # Note that the `python` key is *not* set and the language is overridden to
-    # *not* be `python`. If set to `python`, the build will fail, complaining
-    # that there's no Python tarball to download and install on macOS.
-    # See https://github.com/travis-ci/travis-ci/issues/2312 for details.
-    # So, it shows up as Ruby in the Travis UI but as the PYENV_VERSION_STRING
-    # check can attest, we are still fine.
-    - os: osx
-      language: ruby
-      env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1'
-    # macOS Framework Build
-    # Useful for PyInstaller
-    # Example issue: https://github.com/pyenv/pyenv/issues/443
-    - os: osx
-      language: ruby
-      env: PYENV_VERSION=3.6.1 PYENV_VERSION_STRING='Python 3.6.1' PYTHON_CONFIGURE_OPTS="--enable-framework"
-
-    - env: SETUP_SCRIPT=/dev/null SHELLCHECK=1
 
 cache:
   - pip
@@ -43,10 +11,46 @@ script:
   - python --version
   - if [ -n "$SHELLCHECK" ]; then shellcheck *.sh; fi
 
-deploy:
-  provider: releases
-  api_key:
-    secure: ZbOjmIOmz3TsPFhM7U+RddpJxVJDfudHhKyr+ZIgc/xTDYuzGDD8VRkexpT3dGoDUpgve0SyHPeeg0Otq54mHaaig4RKQN+xDmBtFnbK+zlqjH9pM14p239wPfuMOksWIUzM15QqWe2DQoJ2BrcTdgP2EntNfJIshsoWK8EZADlqIflwLVSRNJ3qKCW+ScO+XI9CGavnKvm+J1/tBUfF8MyR4HGdFlUw17jzsdz0p5O/D7EM8VHqSGNMy6FtKkvnwuyK6gDgE8Y1o1luTDA6Ii1Qr9d0d1Oo23QIk7XxxLICnBZ+BuUIxr457TKQ1/G52J77xj7rmlo8ntdpY29I1cH8qxsyv2eUZskfO+Zvycgw/cVPkUVW24AiBT2s6cyifI56jIMircPaBGvvA/w0kbkUKAKKBsm49esgaQoxb+ewkxhNUXVo85P6IOG+vuOLiefKByOrDAYhRn8vgWwi51IBZlakjZpwP2x7Os9ffllBlRsQp4l2F6QzNVlkshJpBP7HeEl0HbWjnewmRYhmrnCpvQwI4jBFCrjMcFv763z2BNwTbfLVLZvXCKY4bQM4A/h9bdmt83OVwHqVE8sUuFs6/7iLXdfV+phSEWk/fjR9KA/pf49Jja1rzsqCS+SwPU1rr9M865RPm+1zy4ll2BnUde2o3g6kZEz5XAKl1Ig=
-  file: setup-pyenv.sh
-  on:
-    tags: true
+jobs:
+  include:
+    # Normal method of specifying Python version
+    - python: '2.7'
+    # Use PYENV_VERSION with CPython, specific major.minor.change version
+    - env: PYENV_VERSION=3.6.5 PYENV_VERSION_STRING='Python 3.6.5'
+    # Use PYENV_VERSION with CPython which Travis has installed already
+    - env: PYENV_VERSION=2.7.14 PYENV_VERSION_STRING='Python 2.7.14'
+    # Use PYENV_VERSION with PyPy
+    - env: PYENV_VERSION=pypy2.7-6.0.0 PYENV_VERSION_STRING='PyPy 6.0.0'
+    # Use PYENV_VERSION with PyPy and custom options
+    - env: PYENV_VERSION=pypy3.5-6.0.0 PYENV_VERSION_STRING='PyPy 6.0.0' PYENV_ROOT=$HOME/.pyenv-pypy PYENV_RELEASE=v1.2.4 PYENV_CACHE_PATH=$HOME/.pyenv-pypy-cache
+    # Legacy setup-pypy.sh
+    - env: PYPY_VERSION=5.7.1 SETUP_SCRIPT=setup-pypy.sh
+    # macOS
+    # Note that the `python` key is *not* set and the language is overridden to
+    # *not* be `python`. If set to `python`, the build will fail, complaining
+    # that there's no Python tarball to download and install on macOS.
+    # See https://github.com/travis-ci/travis-ci/issues/2312 for details.
+    # So, it shows up as Ruby in the Travis UI but as the PYENV_VERSION_STRING
+    # check can attest, we are still fine.
+    - os: osx
+      language: ruby
+      env: PYENV_VERSION=3.6.5 PYENV_VERSION_STRING='Python 3.6.5'
+    # macOS Framework Build
+    # Useful for PyInstaller
+    # Example issue: https://github.com/pyenv/pyenv/issues/443
+    - os: osx
+      language: ruby
+      env: PYENV_VERSION=3.6.5 PYENV_VERSION_STRING='Python 3.6.5' PYTHON_CONFIGURE_OPTS="--enable-framework"
+
+    - env: SETUP_SCRIPT=/dev/null SHELLCHECK=1
+
+    - stage: release
+      if: tag IS present
+      script: skip
+      deploy:
+        provider: releases
+        api_key:
+          secure: ZbOjmIOmz3TsPFhM7U+RddpJxVJDfudHhKyr+ZIgc/xTDYuzGDD8VRkexpT3dGoDUpgve0SyHPeeg0Otq54mHaaig4RKQN+xDmBtFnbK+zlqjH9pM14p239wPfuMOksWIUzM15QqWe2DQoJ2BrcTdgP2EntNfJIshsoWK8EZADlqIflwLVSRNJ3qKCW+ScO+XI9CGavnKvm+J1/tBUfF8MyR4HGdFlUw17jzsdz0p5O/D7EM8VHqSGNMy6FtKkvnwuyK6gDgE8Y1o1luTDA6Ii1Qr9d0d1Oo23QIk7XxxLICnBZ+BuUIxr457TKQ1/G52J77xj7rmlo8ntdpY29I1cH8qxsyv2eUZskfO+Zvycgw/cVPkUVW24AiBT2s6cyifI56jIMircPaBGvvA/w0kbkUKAKKBsm49esgaQoxb+ewkxhNUXVo85P6IOG+vuOLiefKByOrDAYhRn8vgWwi51IBZlakjZpwP2x7Os9ffllBlRsQp4l2F6QzNVlkshJpBP7HeEl0HbWjnewmRYhmrnCpvQwI4jBFCrjMcFv763z2BNwTbfLVLZvXCKY4bQM4A/h9bdmt83OVwHqVE8sUuFs6/7iLXdfV+phSEWk/fjR9KA/pf49Jja1rzsqCS+SwPU1rr9M865RPm+1zy4ll2BnUde2o3g6kZEz5XAKl1Ig=
+        file: setup-pyenv.sh
+        on:
+          tags: true
